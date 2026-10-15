@@ -1,1 +1,499 @@
-hi
+package storemanagement;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+
+// ================= CUSTOMER =================
+class Customer {
+    private int customerID;
+    private String name;
+    private String phone;
+    private String email;
+    private String address;
+
+    public Customer(int customerID, String name, String phone,
+                    String email, String address) {
+        this.customerID = customerID;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+    }
+
+    public void register() {
+        System.out.println("Customer registered successfully.");
+    }
+
+    public void updateDetails(String phone, String email, String address) {
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        System.out.println("Customer details updated.");
+    }
+
+    public String getCustomerDetails() {
+        return "Customer ID: " + customerID +
+               "\nName: " + name +
+               "\nPhone: " + phone +
+               "\nEmail: " + email +
+               "\nAddress: " + address;
+    }
+}
+
+
+// ================= BILLING =================
+class Billing {
+    private int billID;
+    private Date billDate;
+    private double totalAmount;
+    private double discount;       // FIXED: added discount field
+    private double tax;
+    private double grandTotal;
+
+    private List<BillDetail> items = new ArrayList<>();
+
+    public Billing(int billID, Date billDate,
+                   double discount, double tax) {
+        this.billID = billID;
+        this.billDate = billDate;
+        this.discount = discount;
+        this.tax = tax;
+    }
+
+    public void addItem(BillDetail item) {
+        items.add(item);
+        System.out.println("Product added to bill.");
+    }
+
+    public void removeItem(BillDetail item) {
+        items.remove(item);
+        System.out.println("Product removed from bill.");
+    }
+
+    public double calculateTotal() {
+        totalAmount = 0;
+
+        for (BillDetail item : items) {
+            totalAmount += item.calculateSubtotal();
+        }
+
+        grandTotal = totalAmount - discount + tax;
+
+        return grandTotal;
+    }
+
+    public void generateBill() {
+
+        // Calculate total before displaying the bill
+        calculateTotal();
+
+        System.out.println("\n========== BILL ==========");
+        System.out.println("Bill ID: " + billID);
+        System.out.println("Bill Date: " + billDate);
+
+        for (BillDetail item : items) {
+            System.out.println(item.getDetails());
+        }
+
+        System.out.println("--------------------------");
+        System.out.println("Total Amount: " + totalAmount);
+        System.out.println("Discount: " + discount);
+        System.out.println("Tax: " + tax);
+        System.out.println("Grand Total: " + grandTotal);
+        System.out.println("==========================");
+    }
+}
+
+
+// ================= BILL DETAIL =================
+class BillDetail {
+    private int billID;
+    private int productID;
+    private int quantity;
+    private double unitPrice;
+
+    public BillDetail(int billID, int productID,
+                      int quantity, double unitPrice) {
+        this.billID = billID;
+        this.productID = productID;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+    }
+
+    public double calculateSubtotal() {
+        return quantity * unitPrice;
+    }
+
+    public String getDetails() {
+        return "Product ID: " + productID +
+               " | Quantity: " + quantity +
+               " | Unit Price: " + unitPrice +
+               " | Subtotal: " + calculateSubtotal();
+    }
+}
+
+
+// ================= PAYMENT =================
+class Payment {
+    private int paymentID;
+    private int billID;
+    private String paymentMode;
+    private double amount;
+    private Date paymentDate;
+    private String transactionID;
+
+    public Payment(int paymentID, int billID,
+                   String paymentMode, double amount,
+                   Date paymentDate, String transactionID) {
+        this.paymentID = paymentID;
+        this.billID = billID;
+        this.paymentMode = paymentMode;
+        this.amount = amount;
+        this.paymentDate = paymentDate;
+        this.transactionID = transactionID;
+    }
+
+    public void processPayment() {
+        System.out.println("\nPayment processed successfully.");
+        System.out.println("Payment Mode: " + paymentMode);
+        System.out.println("Amount: " + amount);
+        System.out.println("Payment Date: " + paymentDate);
+    }
+
+    public String getPaymentDetails() {
+        return "Payment ID: " + paymentID +
+               "\nBill ID: " + billID +
+               "\nPayment Mode: " + paymentMode +
+               "\nAmount: " + amount +
+               "\nPayment Date: " + paymentDate +
+               "\nTransaction ID: " + transactionID;
+    }
+
+    public void refund() {
+        System.out.println("Payment refunded.");
+    }
+}
+
+
+// ================= SUPPLIER =================
+class Supplier {
+    private int supplierID;
+    private String supplierName;
+    private String contactNo;
+    private String address;
+    private String email;
+
+    public Supplier(int supplierID, String supplierName,
+                    String contactNo, String address,
+                    String email) {
+        this.supplierID = supplierID;
+        this.supplierName = supplierName;
+        this.contactNo = contactNo;
+        this.address = address;
+        this.email = email;
+    }
+
+    public void addSupplier() {
+        System.out.println("Supplier added successfully.");
+    }
+
+    public void updateSupplier(String contactNo, String email) {
+        this.contactNo = contactNo;
+        this.email = email;
+        System.out.println("Supplier details updated.");
+    }
+
+    public String getSupplierDetails() {
+        return "Supplier ID: " + supplierID +
+               "\nSupplier Name: " + supplierName +
+               "\nContact No: " + contactNo +
+               "\nEmail: " + email;
+    }
+}
+
+
+// ================= PRODUCT =================
+class Product {
+    private int productID;
+    private String productName;
+    private double price;
+    private String category;
+    private String description;
+
+    public Product(int productID, String productName,
+                   double price, String category,
+                   String description) {
+        this.productID = productID;
+        this.productName = productName;
+        this.price = price;
+        this.category = category;
+        this.description = description;
+    }
+
+    public void updatePrice(double price) {
+        this.price = price;
+        System.out.println("Product price updated.");
+    }
+
+    public String getProductDetails() {
+        return "Product ID: " + productID +
+               "\nProduct Name: " + productName +
+               "\nPrice: " + price +
+               "\nCategory: " + category +
+               "\nDescription: " + description;
+    }
+
+    public int getProductID() {
+        return productID;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+}
+
+
+// ================= INVENTORY =================
+class Inventory {
+    private int inventoryID;
+    private int productID;
+    private int stockQuantity;
+    private int reorderLevel;
+    private Date lastUpdated;
+
+    public Inventory(int inventoryID, int productID,
+                     int stockQuantity, int reorderLevel) {
+        this.inventoryID = inventoryID;
+        this.productID = productID;
+        this.stockQuantity = stockQuantity;
+        this.reorderLevel = reorderLevel;
+        this.lastUpdated = new Date();
+    }
+
+    public void updateStock(int quantity) {
+        stockQuantity += quantity;
+        lastUpdated = new Date();
+
+        System.out.println("Stock updated.");
+    }
+
+    public int checkStock() {
+        return stockQuantity;
+    }
+
+    public String getInventoryDetails() {
+        return "Inventory ID: " + inventoryID +
+               "\nProduct ID: " + productID +
+               "\nStock Quantity: " + stockQuantity +
+               "\nReorder Level: " + reorderLevel +
+               "\nLast Updated: " + lastUpdated;
+    }
+}
+
+
+// ================= STAFF =================
+class Staff {
+    private int staffID;
+    private String name;
+    private String phone;
+    private String email;
+    private String role;
+
+    public Staff(int staffID, String name,
+                 String phone, String email,
+                 String role) {
+        this.staffID = staffID;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.role = role;
+    }
+
+    public void sellProduct(Product product) {
+        System.out.println(name + " sold:");
+        System.out.println(product.getProductDetails());
+    }
+
+    public void updateDetails(String phone, String email) {
+        this.phone = phone;
+        this.email = email;
+        System.out.println("Staff details updated.");
+    }
+
+    public String getStaffDetails() {
+        return "Staff ID: " + staffID +
+               "\nName: " + name +
+               "\nPhone: " + phone +
+               "\nEmail: " + email +
+               "\nRole: " + role;
+    }
+}
+
+
+// ================= STORE MANAGER =================
+class StoreManager {
+    private int managerID;
+    private String name;
+    private String phone;
+    private String email;
+
+    public StoreManager(int managerID, String name,
+                        String phone, String email) {
+        this.managerID = managerID;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+    }
+
+    public void manageStaff(Staff staff) {
+        System.out.println(name + " is managing staff.");
+        System.out.println(staff.getStaffDetails());
+    }
+
+    public void viewReports() {
+        System.out.println("Store reports displayed.");
+    }
+
+    public String getManagerDetails() {
+        return "Manager ID: " + managerID +
+               "\nName: " + name +
+               "\nPhone: " + phone +
+               "\nEmail: " + email;
+    }
+}
+
+
+// ================= MAIN CLASS =================
+public class StoreManagementSystem {
+
+    public static void main(String[] args) {
+
+        // ---------- CUSTOMER ----------
+        Customer customer = new Customer(
+                101,
+                "Rohit",
+                "9876543210",
+                "rohit@gmail.com",
+                "Goa"
+        );
+
+        customer.register();
+
+        System.out.println("\nCUSTOMER DETAILS");
+        System.out.println(customer.getCustomerDetails());
+
+
+        // ---------- PRODUCT ----------
+        Product product = new Product(
+                501,
+                "Rice",
+                60.0,
+                "Grocery",
+                "5 kg Rice Bag"
+        );
+
+        System.out.println("\nPRODUCT DETAILS");
+        System.out.println(product.getProductDetails());
+
+
+        // ---------- SUPPLIER ----------
+        Supplier supplier = new Supplier(
+                201,
+                "ABC Suppliers",
+                "9876500000",
+                "Panjim, Goa",
+                "abc@gmail.com"
+        );
+
+        supplier.addSupplier();
+
+        System.out.println("\nSUPPLIER DETAILS");
+        System.out.println(supplier.getSupplierDetails());
+
+
+        // ---------- INVENTORY ----------
+        Inventory inventory = new Inventory(
+                301,
+                501,
+                50,
+                10
+        );
+
+        inventory.updateStock(20);
+
+        System.out.println("\nINVENTORY DETAILS");
+        System.out.println(inventory.getInventoryDetails());
+
+
+        // ---------- STAFF ----------
+        Staff staff = new Staff(
+                401,
+                "Amit",
+                "9876543211",
+                "amit@gmail.com",
+                "Sales Staff"
+        );
+
+        staff.sellProduct(product);
+
+        System.out.println("\nSTAFF DETAILS");
+        System.out.println(staff.getStaffDetails());
+
+
+        // ---------- STORE MANAGER ----------
+        StoreManager manager = new StoreManager(
+                601,
+                "Rahul",
+                "9876543212",
+                "rahul@gmail.com"
+        );
+
+        manager.manageStaff(staff);
+
+        System.out.println("\nMANAGER DETAILS");
+        System.out.println(manager.getManagerDetails());
+
+
+        // ---------- BILLING ----------
+        Billing bill = new Billing(
+                1001,
+                new Date(),
+                50.0,
+                20.0
+        );
+
+        // Product added to bill
+        BillDetail item1 = new BillDetail(
+                1001,
+                product.getProductID(),
+                3,
+                product.getPrice()
+        );
+
+        bill.addItem(item1);
+
+        // Generate bill
+        bill.generateBill();
+
+
+        // ---------- PAYMENT ----------
+        Payment payment = new Payment(
+                701,
+                1001,
+                "UPI",
+                150.0,
+                new Date(),
+                "TXN123456"
+        );
+
+        payment.processPayment();
+
+        System.out.println("\nPAYMENT DETAILS");
+        System.out.println(payment.getPaymentDetails());
+
+        System.out.println("\nStore Management System completed.");
+    }
+}
+
